@@ -44,12 +44,14 @@ class NaukriPlatform(BasePlatform):
         experience = int(preferences.get("experience_years", 0))
         listing_type = preferences.get("looking_for", "job").lower()
 
+        urls = list(construct_naukri_url(title, experience, listing_type) for title in job_titles)
+
         if listing_type == "both":
-            return [
-                construct_naukri_url(job_titles, experience, "job"),
-                construct_naukri_url(job_titles, experience, "internship"),
-            ]
-        return [construct_naukri_url(job_titles, experience, listing_type)]
+            return (
+                list(construct_naukri_url(title, experience, "job") for title in job_titles)+
+                list(construct_naukri_url(title, experience, "internship") for title in job_titles)
+            )
+        return urls
 
     async def scrape_jobs(self, page: Page, search_url: str) -> list[dict]:
         return await scrape_jobs(page, search_url)

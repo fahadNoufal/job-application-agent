@@ -18,7 +18,7 @@
 
 **Additional Preferences:** STRICTLY DO NOT SELECT JOBS/INTERNSHIP FORM ANY OTHER DOMAIN. NO VIDEO EDITING, NO MARKETING, NO SALES,etc
 
-**Platforms:** ['internshala', 'naukri']
+**Platforms:** ['naukri']
 
 **Max Applications:** 20
 

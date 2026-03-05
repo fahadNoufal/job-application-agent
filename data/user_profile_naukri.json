@@ -1,6 +1,12 @@
 {
   "urls": [
-    "https://www.naukri.com/ai-ml-engineer-agentic-ai-developer-ai-engineer-data-scientist-jobs?k=ai%20ml%20engineer%2C%20agentic%20ai%20developer%2C%20ai%20engineer%2C%20data%20scientist&experience=0&qproductJobSource=2&naukriCampus=true",
-    "https://www.naukri.com/ai-ml-engineer-agentic-ai-developer-ai-engineer-data-scientist-internship-jobs?k=ai%20ml%20engineer%2C%20agentic%20ai%20developer%2C%20ai%20engineer%2C%20data%20scientist%20internship&experience=0&qproductJobSource=2&qinternshipFlag=true&naukriCampus=true"
+    "https://www.naukri.com/ai-ml-engineer-jobs?k=ai%20ml%20engineer&experience=0&qproductJobSource=2&naukriCampus=true",
+    "https://www.naukri.com/agentic-ai-developer-jobs?k=agentic%20ai%20developer&experience=0&qproductJobSource=2&naukriCampus=true",
+    "https://www.naukri.com/ai-engineer-jobs?k=ai%20engineer&experience=0&qproductJobSource=2&naukriCampus=true",
+    "https://www.naukri.com/data-scientist-jobs?k=data%20scientist&experience=0&qproductJobSource=2&naukriCampus=true",
+    "https://www.naukri.com/ai-ml-engineer-internship-jobs?k=ai%20ml%20engineer%20internship&experience=0&qproductJobSource=2&qinternshipFlag=true&naukriCampus=true",
+    "https://www.naukri.com/agentic-ai-developer-internship-jobs?k=agentic%20ai%20developer%20internship&experience=0&qproductJobSource=2&qinternshipFlag=true&naukriCampus=true",
+    "https://www.naukri.com/ai-engineer-internship-jobs?k=ai%20engineer%20internship&experience=0&qproductJobSource=2&qinternshipFlag=true&naukriCampus=true",
+    "https://www.naukri.com/data-scientist-internship-jobs?k=data%20scientist%20internship&experience=0&qproductJobSource=2&qinternshipFlag=true&naukriCampus=true"
   ]
 }

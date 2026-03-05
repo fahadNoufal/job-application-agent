@@ -22,7 +22,7 @@ BASE_URL = "https://www.naukri.com"
 # ── URL Builder ───────────────────────────────────────────────────────────────
 
 def construct_naukri_url(
-    job_titles: list[str],
+    job_title: str,
     experience: int,
     role_type: str,
 ) -> str:
@@ -34,14 +34,14 @@ def construct_naukri_url(
     cover the full breadth of what the user is looking for.
     """
     role_type = role_type.lower().strip()
-    titles = [t.strip().lower() for t in job_titles if t.strip()]
+    # titles = [t.strip().lower() for t in job_titles if t.strip()]
 
     # ── Path segment ─────────────────────────────────────────────────────────
-    slug_part = "-".join(t.replace(" ", "-") for t in titles)
+    slug_part = job_title.replace(" ", "-").lower()
     path = f"{slug_part}-internship-jobs" if role_type == "internship" else f"{slug_part}-jobs"
 
     # ── Query keyword string ──────────────────────────────────────────────────
-    keyword_string = ", ".join(titles)
+    keyword_string = job_title.lower().strip()
     if role_type == "internship":
         keyword_string += " internship"
     encoded_keywords = quote(keyword_string)

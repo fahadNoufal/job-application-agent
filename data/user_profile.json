@@ -16,7 +16,6 @@
   "min_yearly_salary": 0,
   "additional_preferences": "STRICTLY DO NOT SELECT JOBS/INTERNSHIP FORM ANY OTHER DOMAIN. NO VIDEO EDITING, NO MARKETING, NO SALES,etc",
   "platforms": [
-    "internshala",
     "naukri"
   ],
   "max_applications": 20,
