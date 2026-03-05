@@ -23,5 +23,8 @@ class AgentState(TypedDict):
     # ── Control ────────────────────────────────────────────────────────────────
     stage: str                      # last completed stage (for crash recovery)
     error: Optional[str]
-    platform: str                   # active platform name
+    platform: str                   # currently active platform name
+    platforms: list[str]            # all selected platforms in order
+    current_platform_index: int     # which platform we're currently running
     automation_mode: str            # "fully_automated" | "semi_automated"
+

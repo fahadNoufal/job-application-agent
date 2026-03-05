@@ -15,7 +15,7 @@ class BasePlatform(ABC):
         ...
 
     @abstractmethod
-    def build_search_url(self, preferences: dict) -> str:
+    def build_search_url(self, preferences: dict) -> list[str]:
         """Construct the job search URL from user preferences."""
         ...
 

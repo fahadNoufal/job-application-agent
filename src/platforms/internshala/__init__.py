@@ -14,6 +14,7 @@ from src.platforms.internshala.applier import apply_to_job
 from src.browser.manager import BrowserManager
 from src.utils.config import INTERNSHALA_STATE_PATH
 from src.utils.logger import get_logger
+from src.llm.generator import classify_domain
 
 logger = get_logger("internshala")
 
@@ -51,6 +52,7 @@ DOMAIN_SLUG_MAP = {
 }
 
 
+# Not Domain , its Role
 def role_to_slug(domain: str) -> str:
     """Convert LLM-classified domain name to Internshala URL slug."""
     normalized = domain.lower().strip()
@@ -62,6 +64,12 @@ def role_to_slug(domain: str) -> str:
         if key in normalized or normalized in key:
             return slug
     # Fallback: slugify the raw string
+    
+    if not slug:
+        logger.info("Deterministic classification failed — using LLM.")
+        domain = classify_domain(domain)
+        slug = role_to_slug(domain)
+    
     slug = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
     logger.warning(f"No slug mapping for domain '{domain}' — using raw slug: {slug}")
     return slug
@@ -106,10 +114,26 @@ class IntershalaPlatform(BasePlatform):
         INTERNSHALA_STATE_PATH.write_bytes(encrypt(json.dumps(state)))
         logger.info("Internshala session saved.")
 
-    def build_search_url(self, preferences: dict) -> str:
-        domain = preferences.get("domain", "software-development")
-        listing_type = preferences.get("type", "internship")
-        return build_internshala_url(domain, listing_type)
+    def build_search_url(self, preferences: dict) -> list[str]:
+        domain_value = preferences.get("domain")
+
+        # If a domain is explicitly provided, use it.
+        # Otherwise, derive it from the primary role.
+        if domain_value:
+            domain = domain_value
+        else:
+            role = preferences.get("primary_role", "Software Development")
+            domain = role_to_slug(role)
+
+        listing_type = preferences.get("looking_for", "internship").lower()
+
+        if listing_type == "both":
+            return [
+                build_internshala_url(domain, "internship"),
+                build_internshala_url(domain, "job"),
+            ]
+
+        return [build_internshala_url(domain, listing_type)]
 
     async def scrape_jobs(self, page: Page, search_url: str) -> list[dict]:
         return await scrape_jobs(page, search_url)

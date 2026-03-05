@@ -14,6 +14,7 @@ from src.llm.prompts import (
     JOB_FILTER_PROMPT,
     APPLICATION_ANSWER_PROMPT,
     STRICT_JSON_RETRY_PROMPT,
+    CHATBOT_QUESTION_PROMPT,
 )
 from src.llm.parsers import (
     parse_json_safe,
@@ -129,3 +130,73 @@ def generate_answers(
         task_description="Generate answers for each application question as a JSON array.",
         expected_count=len(questions),
     )
+
+
+def answer_chatbot_question(
+    question: str,
+    options: list[str],
+    history: list,           # list of ChatMessage objects (from naukri schemas)
+    job_title: str,
+    company: str,
+    description: str,
+    resume_summary: str,
+    preferences_md: str,
+) -> str:
+    """
+    Answer a single Naukri chatbot question in conversational mode.
+    Full Q&A history is passed so answers stay consistent across the session.
+
+    For radio questions: returns exactly one of the provided option strings.
+    For text questions: returns a concise plain-text answer.
+    """
+    # Format history as readable text block
+    if history:
+        history_lines = []
+        for msg in history:
+            opts = f" (options: {', '.join(msg.options)})" if msg.options else ""
+            history_lines.append(f"  Q: {msg.question}{opts}")
+            history_lines.append(f"  A: {msg.answer}")
+        history_text = "\n".join(history_lines)
+    else:
+        history_text = "None — this is the first question."
+
+    # Format options block
+    if options:
+        options_text = "Options (you MUST pick one exactly):\n" + "\n".join(f"  - {o}" for o in options)
+    else:
+        options_text = "(Free text — write a short professional answer)"
+
+    prompt = CHATBOT_QUESTION_PROMPT.format(
+        job_title=job_title,
+        company=company,
+        description=description[:800],   # cap to keep prompt tight
+        resume_summary=resume_summary,
+        preferences_md=preferences_md,
+        history_text=history_text,
+        question=question,
+        options_block=options_text,
+    )
+
+    answer = _call(prompt).strip().strip('"').strip("'")
+
+    # If options were given, validate the answer is one of them
+    if options:
+        options_lower = {o.lower(): o for o in options}
+        normalized = answer.lower()
+        if normalized in options_lower:
+            return options_lower[normalized]   # return original casing
+        # Partial match fallback
+        for lower_opt, original_opt in options_lower.items():
+            if lower_opt in normalized or normalized in lower_opt:
+                logger.warning(
+                    f"Chatbot answer '{answer}' fuzzy-matched to option '{original_opt}'"
+                )
+                return original_opt
+        # No match — return first option as safe fallback and log
+        logger.warning(
+            f"Chatbot answer '{answer}' didn't match any option {options}. "
+            f"Defaulting to first: '{options[0]}'"
+        )
+        return options[0]
+
+    return answer

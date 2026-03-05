@@ -24,11 +24,24 @@ CREATE TABLE IF NOT EXISTS applications (
 );
 """
 
+CREATE_EXTERNAL_LINKS_SQL = """
+CREATE TABLE IF NOT EXISTS external_links (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    platform        TEXT NOT NULL,
+    job_title       TEXT NOT NULL,
+    company         TEXT NOT NULL,
+    original_link   TEXT NOT NULL,
+    external_link   TEXT NOT NULL,
+    saved_at        TEXT NOT NULL
+);
+"""
+
 
 async def init_db() -> None:
     """Create tables if they do not exist."""
     async with aiosqlite.connect(APPLICATIONS_DB_PATH) as db:
         await db.execute(CREATE_TABLE_SQL)
+        await db.execute(CREATE_EXTERNAL_LINKS_SQL)
         await db.commit()
 
 
@@ -84,6 +97,54 @@ async def update_application_status(link: str, status: str, error: Optional[str]
             (status, error, link),
         )
         await db.commit()
+
+
+async def insert_external_link(
+    *,
+    platform: str,
+    job_title: str,
+    company: str,
+    original_link: str,
+    external_link: str,
+) -> None:
+    """
+    Save a job that redirected to an external company website.
+    These are stored separately for manual follow-up.
+    """
+    async with aiosqlite.connect(APPLICATIONS_DB_PATH) as db:
+        await db.execute(
+            """
+            INSERT INTO external_links
+                (platform, job_title, company, original_link, external_link, saved_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                platform,
+                job_title,
+                company,
+                original_link,
+                external_link,
+                datetime.utcnow().isoformat(),
+            ),
+        )
+        await db.commit()
+
+
+async def get_external_links(platform: Optional[str] = None) -> list[dict]:
+    """Return all saved external redirect links, optionally filtered by platform."""
+    async with aiosqlite.connect(APPLICATIONS_DB_PATH) as db:
+        db.row_factory = aiosqlite.Row
+        if platform:
+            cursor = await db.execute(
+                "SELECT * FROM external_links WHERE platform = ? ORDER BY saved_at DESC",
+                (platform,),
+            )
+        else:
+            cursor = await db.execute(
+                "SELECT * FROM external_links ORDER BY saved_at DESC"
+            )
+        rows = await cursor.fetchall()
+        return [dict(r) for r in rows]
 
 
 async def export_to_csv(path: str) -> None:

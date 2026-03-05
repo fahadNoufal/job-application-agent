@@ -1,27 +1,24 @@
 {
-  "looking_for": "job",
-  "primary_role": "Data Scientist",
+  "looking_for": "both",
+  "primary_role": "AI ML Engineer",
   "other_roles": [
-    "data scientist",
-    "ai engineer",
-    "gen ai engineer",
-    "agentic ai developer/engineer"
+    "Agentic AI Developer",
+    "AI Engineer",
+    "Data Scientist"
   ],
-  "experience_years": 1,
+  "experience_years": 0,
   "work_mode": "both",
   "preferred_locations": [
-    "banglore",
-    "kerala"
+    "Bangalore",
+    "Kerala"
   ],
   "min_monthly_salary": 0,
   "min_yearly_salary": 0,
-  "additional_preferences": "ask them to view my portfolio websit, tell them it will be intresting\\",
+  "additional_preferences": "STRICTLY DO NOT SELECT JOBS/INTERNSHIP FORM ANY OTHER DOMAIN. NO VIDEO EDITING, NO MARKETING, NO SALES,etc",
   "platforms": [
-    "internshala"
+    "internshala",
+    "naukri"
   ],
-  "max_applications": 10,
-  "automation_mode": "semi_automated",
-  "domain": "data-science",
-  "type": "job",
-  "url": "https://internshala.com/jobs/data-science-jobs"
+  "max_applications": 20,
+  "automation_mode": "semi_automated"
 }

@@ -63,7 +63,7 @@ async def scrape_jobs(page: Page, search_url: str, max_pages: int = 1) -> list[d
             logger.info("No more pages.")
             break
         current_url = next_url
-        await human_delay(1.5, 3.0)
+        # await human_delay(1.5, 3.0)
 
     logger.info(f"Total scraped: {len(all_jobs)} jobs")
     return all_jobs

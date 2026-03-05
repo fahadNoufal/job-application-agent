@@ -90,6 +90,37 @@ Rules:
 - Return ONLY valid JSON. No markdown, no explanation.
 """
 
+CHATBOT_QUESTION_PROMPT = """
+You are helping a job applicant answer a single question in a live chatbot application form.
+
+JOB CONTEXT:
+Title: {job_title}
+Company: {company}
+Description: {description}
+
+APPLICANT RESUME SUMMARY:
+{resume_summary}
+
+APPLICANT PREFERENCES:
+{preferences_md}
+
+CONVERSATION SO FAR (already answered questions — stay consistent with these):
+{history_text}
+
+NOW ANSWER THIS QUESTION:
+Question: {question}
+{options_block}
+
+Rules:
+- If options are provided, you MUST return EXACTLY one of the option strings, verbatim.
+- If no options, return a concise, professional plain-text answer (1–2 sentences max).
+- Stay consistent with answers already given in the conversation history.
+- Base answers on the resume summary — do not fabricate experience.
+- Do NOT include any explanation, preamble, or punctuation outside your answer.
+- Return the answer text ONLY.
+"""
+
+
 STRICT_JSON_RETRY_PROMPT = """
 Your previous response was not valid JSON. 
 

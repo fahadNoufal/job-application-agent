@@ -1,29 +1,25 @@
 # User Job Preferences
 
-**Looking For:** job
+**Looking For:** both
 
-**Primary Role:** Data Scientist
+**Primary Role:** AI ML Engineer
 
-**Other Roles:** ['data scientist', 'ai engineer', 'gen ai engineer', 'agentic ai developer/engineer']
+**Other Roles:** ['Agentic AI Developer', 'AI Engineer', 'Data Scientist']
 
-**Experience Years:** 1
+**Experience Years:** 0
 
 **Work Mode:** both
 
-**Preferred Locations:** ['banglore', 'kerala']
+**Preferred Locations:** ['Bangalore', 'Kerala']
 
 **Min Monthly Salary:** 0
 
 **Min Yearly Salary:** 0
 
-**Additional Preferences:** ask them to view my portfolio websit, tell them it will be intresting\
+**Additional Preferences:** STRICTLY DO NOT SELECT JOBS/INTERNSHIP FORM ANY OTHER DOMAIN. NO VIDEO EDITING, NO MARKETING, NO SALES,etc
 
-**Platforms:** ['internshala']
+**Platforms:** ['internshala', 'naukri']
 
-**Max Applications:** 10
+**Max Applications:** 20
 
 **Automation Mode:** semi_automated
-
-**Domain:** data-science
-
-**Type:** job

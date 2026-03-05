@@ -87,8 +87,13 @@ def collect_inputs() -> dict:
     )
 
     # 10. Platforms
-    console.print("Available platforms: [bold]internshala[/bold] (LinkedIn, Wellfound — coming soon)")
-    prefs["platforms"] = ["internshala"]
+    console.print("\n[bold]Platforms[/bold]")
+    console.print("  [cyan]1[/cyan] — Internshala")
+    console.print("  [cyan]2[/cyan] — Naukri")
+    console.print("  [cyan]3[/cyan] — Both (Internshala first, then Naukri)\n")
+    platform_choice = Prompt.ask("Choose", choices=["1", "2", "3"], default="3")
+    platform_map = {"1": ["internshala"], "2": ["naukri"], "3": ["internshala", "naukri"]}
+    prefs["platforms"] = platform_map[platform_choice]
 
     # 11. Max applications
     prefs["max_applications"] = IntPrompt.ask(
@@ -165,7 +170,10 @@ async def main():
         "application_results": [],
         "stage": "init",
         "error": None,
-        "platform": "internshala",
+        "platform": prefs["platforms"][0],             # active platform (first in list)
+        "platforms": prefs.get("platforms", ["internshala"]),
+        "current_platform_index": 0,
+        "automation_mode": prefs.get("automation_mode", "semi_automated"),
     }
 
     console.print("\n[bold green]Starting agent workflow...[/bold green]\n")
@@ -177,14 +185,17 @@ async def main():
     results = final_state.get("application_results", [])
     applied = [r for r in results if r["status"] == "applied"]
     skipped = [r for r in results if r["status"] == "skipped"]
-    failed  = [r for r in results if r["status"] not in ("applied", "skipped")]
+    external = [r for r in results if r["status"] == "external"]
+    failed   = [r for r in results if r["status"] not in ("applied", "skipped", "external", "already_applied")]
+
 
     console.print(Panel.fit(
         f"[bold]Run Complete[/bold]\n\n"
-        f"✅ Applied:  {len(applied)}\n"
-        f"⏭  Skipped:  {len(skipped)}\n"
-        f"❌ Failed:   {len(failed)}\n"
-        f"📋 Results saved to applications.db",
+        f"✅ Applied:   {len(applied)}\n"
+        f"⏭  Skipped:   {len(skipped)}\n"
+        f"🔗 External:  {len(external)}  (saved to DB for manual follow-up)\n"
+        f"❌ Failed:    {len(failed)}\n"
+        f"📋 Saved to:  applications.db",
         border_style="green" if not failed else "yellow",
     ))
 
